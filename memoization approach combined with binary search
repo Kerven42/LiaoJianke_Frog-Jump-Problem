@@ -1,0 +1,35 @@
+class Solution {
+    private Boolean[][] rec; // A two-dimensional array used to record the state
+
+    // The main function, which determines whether the frog can jump to the last stone
+    public boolean canCross(int[] stones) {
+        int n = stones.length;
+        rec = new Boolean[n][n]; // Initialize an array of status records
+        return dfs(stones, 0, 0); // Call the depth-first search function
+    }
+
+    // A depth-first search function that determines if the frog can jump to stone i, and the last jump distance is lastDis
+    private boolean dfs(int[] stones, int i, int lastDis) {
+        if (i == stones.length - 1) { // It returns true if the last stone has already been jumped
+            return true;
+        }
+        if (rec[i][lastDis] != null) { 
+// If the current state has already been computed, the result for that state is directly returned
+            return rec[i][lastDis];
+        }
+// The possibility to traverse the distance of the frog's previous jump at its current position
+
+        for (int curDis = lastDis - 1; curDis <= lastDis + 1; curDis++) {
+            if (curDis > 0) { // The jump distance must be greater than 0
+
+                // Use binary search to find a position in the remaining stones to jump to
+
+                int j = Arrays.binarySearch(stones, i + 1, stones.length, curDis + stones[i]);
+                if (j >= 0 && dfs(stones, j, curDis)) { 
+// If it is found and can jump to the last stone, then it returns true                    return rec[i][lastDis] = true; 
+// Record the current state as true
+                }
+            }
+        }
+        return rec[i][lastDis] = false; // If we can't jump to the last stone, we record the current state as false    }
+}
