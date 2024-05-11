@@ -1,0 +1,33 @@
+class Solution {
+    public boolean canCross(int[] stones) {
+        int n = stones.length;
+        // Create a two-dimensional array to store the likelihood of jumping to each stone
+        boolean[][] dp = new boolean[n][n];
+        // Initialize the jump at the starting position to true
+        dp[0][0] = true;
+// Check the distance between stones and return false if the distance is greater than the current position of the stone
+        for (int i = 1; i < n; ++i) {
+            if (stones[i] - stones[i - 1] > i) {
+                return false;
+            }
+        }
+ // Iterate over each stone
+        for (int i = 1; i < n; ++i) {
+            // The traversal starts from the previous stone of the current stone
+            for (int j = i - 1; j >= 0; --j) {
+                // Calculate the jump distance from the JTH stone to the ith stone
+                int k = stones[i] - stones[j];
+                // If the distance is greater than j+1, we break out of the current loop
+                if (k > j + 1) {
+                    break; }
+// Update the likelihood of jumping to the ith stone at union distance k
+                dp[i][k] = dp[j][k - 1] || dp[j][k] || dp[j][k + 1];
+                // Returns true if jumping to the last stone and a jump of distance k is possible                if (i == n - 1 && dp[i][k]) {
+                    return true;
+                }
+            }
+        }
+        // If we can't jump to the last stone, we return false
+        return false;
+    }
+}
